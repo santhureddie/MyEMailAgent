@@ -1,0 +1,6 @@
+{
+  "name": "@emailagent/shared",
+  "version": "0.1.0",
+  "main": "types/common.ts",
+  "types": "types/common.ts"
+}

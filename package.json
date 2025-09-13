@@ -1,0 +1,16 @@
+{
+  "name": "emailagent-monorepo",
+  "private": true,
+  "workspaces": [
+    "extension",
+    "backend",
+    "shared"
+  ],
+  "scripts": {
+    "build:extension": "cd extension && npm run build",
+    "build:backend": "cd backend && npm run build",
+    "dev:extension": "cd extension && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "install:all": "npm install --workspaces"
+  }
+}

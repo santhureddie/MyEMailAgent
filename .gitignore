@@ -1,0 +1,45 @@
+# Node
+node_modules/
+.env*
+dist/
+build/
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# Extension build
+extension/dist/
+extension/build/
+extension/.cache/
+extension/.vite/
+extension/.next/
+extension/.DS_Store
+
+# Backend build
+backend/dist/
+backend/build/
+backend/.cache/
+backend/.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Chrome Extension
+*.crx
+*.pem
+
+# Misc
+*.tmp
+*.temp
+
+# Shared
+shared/dist/
+shared/build/
