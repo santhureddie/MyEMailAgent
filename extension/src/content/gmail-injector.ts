@@ -14,8 +14,7 @@ function injectSidebar() {
   sidebar.style.background = '#fff';
   sidebar.style.boxShadow = '-2px 0 8px rgba(0,0,0,0.08)';
   document.body.appendChild(sidebar);
-  // Directly import the React app as a content script (bundled by Vite)
-  // The sidebar.js is included as a content script in manifest.json
+  // React sidebar will be mounted by sidebar.js as a content script
 }
 
 function observeGmailNavigation() {

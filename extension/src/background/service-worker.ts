@@ -4,31 +4,23 @@ import { getTokens, setTokens } from '../shared/storage';
 import { sendMessage, onMessage } from '../shared/messages';
 
 
-const GMAIL_OAUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth';
-const CLIENT_ID = '<YOUR_GMAIL_CLIENT_ID>'; // TODO: Move to config/env
-const REDIRECT_URI = chrome.identity.getRedirectURL('oauth2');
-const SCOPES = 'https://www.googleapis.com/auth/gmail.modify';
-
-function parseFragment(fragment: string): AuthTokens | null {
-  const params = new URLSearchParams(fragment.replace(/^#/, ''));
-  const access_token = params.get('access_token');
-  const expires_in = params.get('expires_in');
-  // Google OAuth implicit flow does not return refresh_token
-  if (!access_token) return null;
-  return {
-    access_token,
-    expires_in: expires_in ? parseInt(expires_in) : undefined
-  };
-}
+// Backend-managed OAuth
+const BACKEND_BASE = 'http://localhost:3001';
 
 async function launchGmailOAuth(): Promise<AuthTokens | null> {
   try {
-    const url = `${GMAIL_OAUTH_URL}?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=${encodeURIComponent(SCOPES)}`;
-    const result = await chrome.identity.launchWebAuthFlow({ url, interactive: true });
-    // result is a redirect URL with fragment
-    const fragment = result.split('#')[1] || '';
-    const tokens = parseFragment(fragment);
-    if (tokens) await setTokens(tokens);
+    // Step 1: Get consent URL from backend
+    const res = await fetch(`${BACKEND_BASE}/auth/start`, { method: 'POST' });
+    const { url } = await res.json();
+    // Step 2: Launch Chrome OAuth flow to backend
+    const redirect = await chrome.identity.launchWebAuthFlow({ url, interactive: true });
+    // Step 3: Backend returns tokens in redirect URL (parse as needed)
+    const params = new URLSearchParams(redirect.split('?')[1] || '');
+    const access_token = params.get('access_token');
+    const refresh_token = params.get('refresh_token');
+    if (!access_token) return null;
+    const tokens: AuthTokens = { access_token, refresh_token: refresh_token || undefined };
+    await setTokens(tokens);
     return tokens;
   } catch (e) {
     console.error('OAuth error', e);

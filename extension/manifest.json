@@ -19,16 +19,11 @@
   "content_scripts": [
     {
       "matches": ["https://mail.google.com/*"],
-      "js": ["dist/gmail-injector.js"],
+      "js": ["dist/gmail-injector.js", "dist/sidebar.js"],
       "run_at": "document_idle"
     }
   ],
-  "web_accessible_resources": [
-    {
-      "resources": ["sidebar.js", "sidebar.css"],
-      "matches": ["https://mail.google.com/*"]
-    }
-  ],
+  "web_accessible_resources": [],
   "action": {
     "default_title": "EmailAgent"
   },

@@ -3,15 +3,18 @@ import expressWs from 'express-ws';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
+
 import gmailRoutes from './routes/gmail';
 import aiRoutes from './routes/ai';
-import voiceRoutes from './routes/voice';
+// voiceRoutes import moved below
 
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const expressApp = express();
 const wsInstance = expressWs(expressApp);
 const app = wsInstance.app;
+
+import voiceRoutes from './routes/voice';
 app.use(cors({
   origin: (origin, cb) => {
     if (!origin) return cb(null, true);
