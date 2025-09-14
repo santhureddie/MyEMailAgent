@@ -14,22 +14,17 @@
     "http://localhost:3001/*"
   ],
   "background": {
-    "service_worker": "dist/service-worker.js"
+    "service_worker": "service-worker.js"
   },
   "content_scripts": [
     {
       "matches": ["https://mail.google.com/*"],
-      "js": ["dist/gmail-injector.js", "dist/sidebar.js"],
+      "js": ["gmail-injector.js", "sidebar.js"],
       "run_at": "document_idle"
     }
   ],
   "web_accessible_resources": [],
   "action": {
     "default_title": "EmailAgent"
-  },
-  "icons": {
-    "16": "icon-16.png",
-    "48": "icon-48.png",
-    "128": "icon-128.png"
   }
 }

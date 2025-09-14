@@ -1,9 +1,14 @@
 import OpenAI from 'openai';
-import type { DraftSuggestion, EmailCategory, Reminder, VoiceCommand } from '../types/api';
+import type { DraftSuggestion, Category, Reminder, VoiceCommand } from '../types/api';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = process.env.OPENAI_API_KEY 
+  ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+  : null;
 
-export async function categorizeEmails(emails: string[]): Promise<EmailCategory[]> {
+export async function categorizeEmails(emails: string[]): Promise<Category[]> {
+  if (!openai) {
+    throw new Error('OpenAI API key not configured');
+  }
   // Example: Use chat.completions.create for categorization
   const prompt = `Categorize these emails: ${JSON.stringify(emails)}`;
   const response = await openai.chat.completions.create({
@@ -14,7 +19,10 @@ export async function categorizeEmails(emails: string[]): Promise<EmailCategory[
   return [];
 }
 
-export async function generateDraft(email: string, tone: string): Promise<DraftSuggestion> {
+export async function generateDraft(email: string, tone: 'Formal' | 'Casual' | 'Quick'): Promise<DraftSuggestion> {
+  if (!openai) {
+    throw new Error('OpenAI API key not configured');
+  }
   const prompt = `Write a ${tone} reply to: ${email}`;
   const response = await openai.chat.completions.create({
     model: 'gpt-3.5-turbo',
@@ -25,6 +33,9 @@ export async function generateDraft(email: string, tone: string): Promise<DraftS
 }
 
 export async function extractReminders(emails: string[]): Promise<Reminder[]> {
+  if (!openai) {
+    throw new Error('OpenAI API key not configured');
+  }
   const prompt = `Extract reminders from these emails: ${JSON.stringify(emails)}`;
   const response = await openai.chat.completions.create({
     model: 'gpt-3.5-turbo',

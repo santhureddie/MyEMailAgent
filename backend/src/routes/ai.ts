@@ -8,7 +8,8 @@ router.post('/categorize', async (req, res) => {
     const categories = await categorizeEmails(req.body.emails);
     res.json(categories);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    const message = err instanceof Error ? err.message : String(err);
+    res.status(500).json({ error: message });
   }
 });
 
@@ -17,7 +18,8 @@ router.post('/draft', async (req, res) => {
     const draft = await generateDraft(req.body.email, req.body.tone);
     res.json(draft);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    const message = err instanceof Error ? err.message : String(err);
+    res.status(500).json({ error: message });
   }
 });
 
@@ -26,7 +28,8 @@ router.post('/reminders', async (req, res) => {
     const reminders = await extractReminders(req.body.emails);
     res.json(reminders);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    const message = err instanceof Error ? err.message : String(err);
+    res.status(500).json({ error: message });
   }
 });
 

@@ -3,9 +3,18 @@ import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
 import tailwindcss from 'tailwindcss';
 import autoprefixer from 'autoprefixer';
+import { copyFileSync } from 'fs';
+
+// Plugin to copy manifest.json
+const copyManifest = () => ({
+  name: 'copy-manifest',
+  writeBundle() {
+    copyFileSync('manifest.json', 'dist/manifest.json');
+  }
+});
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), copyManifest()],
   build: {
     rollupOptions: {
       input: {

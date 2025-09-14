@@ -6,7 +6,7 @@ import path from 'path';
 
 import gmailRoutes from './routes/gmail';
 import aiRoutes from './routes/ai';
-// voiceRoutes import moved below
+import voiceRoutes from './routes/voice';
 
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
@@ -14,9 +14,8 @@ const expressApp = express();
 const wsInstance = expressWs(expressApp);
 const app = wsInstance.app;
 
-import voiceRoutes from './routes/voice';
 app.use(cors({
-  origin: (origin, cb) => {
+  origin: (origin: string | undefined, cb: (err: Error | null, allow?: boolean) => void) => {
     if (!origin) return cb(null, true);
     if (origin.startsWith('chrome-extension://')) return cb(null, true);
     if (origin.startsWith('http://localhost')) return cb(null, true);
@@ -30,7 +29,7 @@ app.use('/gmail', gmailRoutes);
 app.use('/ai', aiRoutes);
 app.use('/voice', voiceRoutes);
 
-app.use((err, req, res, next) => {
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error(err);
   res.status(500).json({ success: false, error: err.message });
 });
